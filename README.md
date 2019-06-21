@@ -1,1 +1,1 @@
-# openebs-director-charts
+# director-charts
