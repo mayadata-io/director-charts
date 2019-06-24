@@ -1,0 +1,76 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: alertmanager
+  namespace: {{ .Values.server.namespace }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: alertmanager
+    spec:
+      serviceAccountName: sa-maya-io
+      initContainers:
+      - name: am-wait-for-crb
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}')
+          echo $MAYA
+          until [ ! -z "$MAYA" ]
+          do
+             echo "wating for ClusterRoleBinding";
+             sleep 1;
+             export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}');
+             echo $MAYA;
+          done
+      - name: am-wait-for-configs
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for configs"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l name=configs -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w configs | wc -l)
+             echo $COUNT
+          done
+      - name: am-wait-for-maya-io
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for maya-io-server"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l app=maya-io -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w maya-io | wc -l)
+             echo $COUNT
+          done
+      containers:
+      - name: alertmanager
+        image: registry.mayadata.io/cortex-alertmanager:{{ .Values.server.release }}
+        imagePullPolicy: Always
+        args:
+        - -log.level=debug
+        - -server.http-listen-port=80
+        - -alertmanager.configs.url=http://configs.{{ .Values.server.namespace }}.svc.cluster.local:80
+        - -alertmanager.web.external-url=/api/prom/alertmanager
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: {{ .Values.server.dockersecret }}
+
