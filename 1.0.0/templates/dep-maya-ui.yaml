@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+  name: maya-ui
+  namespace: {{ .Values.server.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: maya-ui
+  template:
+    metadata:
+      labels:
+        app: maya-ui
+    spec:
+      initContainers:
+      - name: config-data
+        image: registry.mayadata.io/vendor:{{ .Values.server.release }}
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        env:
+        - name: VENDOR
+          value: "mod"
+        command: ["sh","-c","./entrypoint.sh"]
+        volumeMounts:
+        - name: config-data
+          mountPath: /tmp/mo-vendor
+          mountPropagation: Bidirectional
+      containers:
+      - image: registry.mayadata.io/maya-ui:{{ .Values.server.release }}
+        imagePullPolicy: Always
+        name: maya-ui
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+        env:
+        - name: VENDOR
+          value: "mod"
+        volumeMounts:
+        - name: config-data
+          mountPath: /tmp/mo-vendor
+      imagePullSecrets:
+      - name: {{ .Values.server.dockersecret }}
+      volumes:
+        - name: config-data
+          hostPath:
+            path: /tmp/mo-vendor
+

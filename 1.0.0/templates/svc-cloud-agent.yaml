@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-agent-service
+  labels:
+    name: cloud-agent
+    app: cloud-agent
+  namespace: {{ .Values.server.namespace }}
+spec:
+  ports:
+    - name: app
+      port: 8880
+      protocol: TCP
+      targetPort: 8880
+  selector:
+    name: cloud-agent
+    app: cloud-agent
