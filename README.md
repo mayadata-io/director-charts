@@ -1,1 +1,1 @@
-# director-charts
+# mayaonprem-charts
