@@ -8,9 +8,11 @@ Introduction
 This chart bootstraps MayaOnprem on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
-- Kubernetes 1.11.0+ with RBAC enabled
-- iSCSI PV support in the underlying infrastructure
-- Create a secret with docker registry credentials and use it during helm install as parameter for value 'dockersecret'
+- Kubernetes 1.12.0+ with RBAC enabled.
+- iSCSI PV support in the underlying infrastructure.
+- Deploy openebs(0.9.0 and above) and create a storagepoolclaim using external disks and create a storageClass name cstor-storage-class.
+- Create a github Oauth app and have the client id,secret and auth enable ready.
+- Create a secret with docker registry credentials and use it during helm install as parameter for value 'dockersecret'.
 
 ## Installing MayaOnprem
 ```
@@ -83,5 +85,7 @@ Alternatively, a YAML file that specifies the values for the parameters can be p
 ```shell
 helm install -f values.yaml .
 ```
+
+Once MOD pods are in running state, it can be accessible from browser using NodeIp given in URl along with NodePort(Nodeip:port)
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
