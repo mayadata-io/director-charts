@@ -86,6 +86,6 @@ Alternatively, a YAML file that specifies the values for the parameters can be p
 helm install -f values.yaml .
 ```
 
-Once MOD pods are in running state, it can be accessible from browser using NodeIp given in URl along with NodePort(Nodeip:port)
+Once MOD pods are in running state, it can be accessible from browser using NodeIp given in URL along with NodePort(Nodeip:port)
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
