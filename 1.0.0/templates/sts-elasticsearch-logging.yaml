@@ -4,9 +4,8 @@ metadata:
   labels:
     k8s-app: elasticsearch-logging
   name: elasticsearch-logging
-  namespace: {{ .Values.server.namespace }}
 spec:
-  replicas: {{ .Values.elasticsearch.replicas }}
+  replicas: {{ .Values.elasticSearch.replicas }}
   selector:
     matchLabels:
       k8s-app: elasticsearch-logging
@@ -50,7 +49,7 @@ spec:
         - mountPath: /usr/share/elasticsearch/data
           name: elasticsearch-logging
       imagePullSecrets:
-      - name: {{ .Values.server.dockersecret }}
+      - name: {{ .Values.server.dockerSecret }}
       initContainers:
       - command:
         - /sbin/sysctl
@@ -80,7 +79,7 @@ spec:
       serviceAccount: elasticsearch-logging
       serviceAccountName: elasticsearch-logging
       imagePullSecrets:
-      - name: {{ .Values.server.dockersecret }}
+      - name: {{ .Values.server.dockerSecret }}
   volumeClaimTemplates:
   - metadata:
       annotations:
@@ -90,6 +89,6 @@ spec:
       - ReadWriteOnce
       resources:
         requests:
-          storage: {{ .Values.elasticsearch.storagecapacity }}
-      storageClassName: {{ .Values.elasticsearch.storageclass }}
+          storage: {{ .Values.elasticSearch.storageCapacity }}
+      storageClassName: {{ .Values.elasticSearch.storageClass }}
 

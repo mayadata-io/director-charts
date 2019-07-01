@@ -2,7 +2,6 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: ingester
-  namespace: {{ .Values.server.namespace }}
 spec:
   replicas: {{ .Values.ingester.replicas }}
 
@@ -63,7 +62,7 @@ spec:
           do
              echo "wating for cassandra"
              sleep 2;
-             export COUNT=$(kubectl get pods -l app=cassandra -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w cassandra | wc -l)
+             export COUNT=$(kubectl get pods -l app=cassandra -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w cassandra | wc -l)
              echo $COUNT
           done
       - name: in-wait-for-consul
@@ -79,7 +78,7 @@ spec:
           do
              echo "wating for consul"
              sleep 2;
-             export COUNT=$(kubectl get pods -l name=consul -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w consul | wc -l)
+             export COUNT=$(kubectl get pods -l name=consul -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w consul | wc -l)
              echo $COUNT
           done
       - name: in-wait-for-table-manager
@@ -95,7 +94,7 @@ spec:
           do
              echo "wating for table-manager"
              sleep 2;
-             export COUNT=$(kubectl get pods -l name=table-manager -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w table-manager | wc -l)
+             export COUNT=$(kubectl get pods -l name=table-manager -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w table-manager | wc -l)
              echo $COUNT
           done
       containers:
@@ -105,12 +104,12 @@ spec:
         args:
         - -ingester.join-after=30s
         - -ingester.claim-on-rollout=true
-        - -consul.hostname=consul.{{ .Values.server.namespace }}.svc.cluster.local:8500
+        - -consul.hostname=consul.{{ .Release.Namespace }}.svc.cluster.local:8500
         - -dynamodb.original-table-name=cortex
         - -chunk.storage-client=cassandra
-        - -cassandra.addresses=cassandra.{{ .Values.server.namespace }}.svc.cluster.local
+        - -cassandra.addresses=cassandra.{{ .Release.Namespace }}.svc.cluster.local
         - -cassandra.keyspace=mayacortex
-        - -cassandra.replication-factor={{ .Values.cortex.replicationfactor }}
+        - -cassandra.replication-factor={{ .Values.cortex.replicationFactor }}
         - -cassandra.timeout={{ .Values.cortex.timeout }}
         - -dynamodb.periodic-table.prefix=cortex_weekly_
         - -dynamodb.periodic-table.from=2017-01-06
@@ -120,7 +119,7 @@ spec:
         - -dynamodb.v5-schema-from=2017-02-22
         - -dynamodb.v6-schema-from=2017-03-19
         - -dynamodb.chunk-table.from=2017-04-17
-        - -memcached.hostname=memcached.{{ .Values.server.namespace }}.svc.cluster.local
+        - -memcached.hostname=memcached.{{ .Release.Namespace }}.svc.cluster.local
         - -memcached.timeout=100ms
         - -memcached.service=memcached
         ports:
@@ -132,5 +131,5 @@ spec:
           initialDelaySeconds: 15
           timeoutSeconds: 1
       imagePullSecrets:
-      - name: {{ .Values.server.dockersecret }}
+      - name: {{ .Values.server.dockerSecret }}
 

@@ -2,13 +2,12 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: maya-grafana-cfgmap
-  namespace: {{ .Values.server.namespace }}
 data:
   grafana.ini: |
     #################################### Server ####################################
     [server]
     # The public facing domain name used to access grafana from a browser
-    domain = ${URL} 
+    domain = {{ .Values.server.url }}
     # If you use reverse proxy and sub path specify full url (with sub path)
     root_url = %(protocol)s://%(domain)s:/grafana
     [users]

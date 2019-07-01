@@ -2,11 +2,10 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
   name: crb-maya-io
-  namespace: {{ .Values.server.namespace }}
 subjects:
 - kind: ServiceAccount
   name: sa-maya-io
-  namespace: {{ .Values.server.namespace }}
+  namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: cluster-admin

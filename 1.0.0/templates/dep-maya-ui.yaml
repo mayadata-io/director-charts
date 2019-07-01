@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   labels:
   name: maya-ui
-  namespace: {{ .Values.server.namespace }}
 spec:
   selector:
     matchLabels:
@@ -42,7 +41,7 @@ spec:
         - name: config-data
           mountPath: /tmp/mo-vendor
       imagePullSecrets:
-      - name: {{ .Values.server.dockersecret }}
+      - name: {{ .Values.server.dockerSecret }}
       volumes:
         - name: config-data
           hostPath:

@@ -4,7 +4,6 @@ metadata:
   labels:
     k8s-app: elasticsearch-logging
   name: elasticsearch-logging
-  namespace: {{ .Values.server.namespace }}
 spec:
   ports:
   - port: 9200

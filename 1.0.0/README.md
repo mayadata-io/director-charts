@@ -12,7 +12,7 @@ This chart bootstraps MayaOnprem on a [Kubernetes](http://kubernetes.io) cluster
 - iSCSI PV support in the underlying infrastructure.
 - Deploy openebs(0.9.0 and above) and create a storagepoolclaim using external disks and create a storageClass name cstor-storage-class.
 - Create a github Oauth app and have the client id,secret and auth enable ready.
-- Create a secret with docker registry credentials and use it during helm install as parameter for value 'dockersecret'.
+- Create a secret with docker registry credentials and use it during helm install as parameter for value 'dockerSecret'.
 
 ## Installing MayaOnprem
 ```
@@ -25,56 +25,55 @@ The following table lists the configurable parameters of the MayaOnprem chart an
 
 | Parameter                                       | Description                                   | Default                                   |
 | ------------------------------------------------|-----------------------------------------------| ------------------------------------------|
-| `server.dockersecret`                           | Docker secret for pulling the images          |      none                                 |
-| `server.namespace`                              | Namespace for MayaOnprem installations  |      default                              |
-| `server.PROTOCOL`                               | http/https protocol for accessing the UI      |      http                                 |
-| `server.URL`                                    | URL/IP address:port for UI                    |      none                                 |
-| `server.API_AUTH_ACCESS_MODE`                   | TBD                                           |      unrestricted                         |
-| `server.SERVER_DEFAULT_ACCESS_GRANT`            | TBD                                           |      true                                 |
-| `server.API_UI_ENABLED`                         | TBD                                           |      true                                 |
-| `server.SETUP_NAME`                             | TBD                                           |      mayaonprem                     |
-| `server.API_AUTH_EXTERNAL_PROVIDER_ENABLED`     | TBD                                           |      true                                 |
-| `server.API_AUTH_EXTERNAL_PROVIDER_CONFIGURED`  | TBD                                           |      githubconfig                         |
-| `server.API_AUTH_INTERNAL_PROVIDER_ENABLED`     | TBD                                           |      false                                |
-| `server.API_AUTH_INTERNAL_PROVIDER_CONFIGURED`  | TBD                                           |      none                                 |
-| `server.API_AUTH_ENABLER`                       | TBD                                           |      none                                 |
-| `server.API_AUTH_GITHUB_CLIENT_ID`              | TBD                                           |      none                                 |
-| `server.API_AUTH_GITHUB_CLIENT_SECRET`          | TBD                                           |      none                                 |
-| `server.API_AUTH_GOOGLE_CLIENT_ID`              | TBD                                           |      none                                 |
-| `server.API_AUTH_GOOGLE_CLIENT_SECRET`          | TBD                                           |      none                                 |
-| `server.CLUSTER_DOMAIN`                         | TBD                                           |      cluster.local                        |
-| `server.FEATURE_SUBSCRIPTION_DISABLE`           | TBD                                           |      true                                 |
-| `server.SUBSCRIPTION_TYPE`                      | TBD                                           |      none                                 |
-| `server.FEATURE_BILLING_DISABLE`                | TBD                                           |      true                                 |
-| `server.BILLING_TYPE`                           | TBD                                           |      external                             |
-| `server.FEATURE_EMAIL_DISABLE`                  | TBD                                           |      true                                 |
-| `server.SENDER_EMAIL_ADRESS`                    | TBD                                           |      none                                 |
-| `server.SENDER_EMAIL_PASSWORD`                  | TBD                                           |      none                                 |
-| `server.FEATURE_DOCS_DISABLE`                   | TBD                                           |      false                                |
-| `server.DOCS_URL`                               | TBD                                           |      https://docs.mayaonline.io           |
-| `server.FEATURE_CHATBOT_DISABLE`                | TBD                                           |      true                                 |
-| `server.SLACK_CONFIG_BOT_CLIENT_ID`             | TBD                                           |      none                                 |
-| `server.SLACK_CONFIG_BOT_CLIENT_SECRET`         | TBD                                           |      none                                 |
-| `server.SLACK_NOTIFICATION_WELCOME_MESSAGE`     | TBD                                           |      none                                 |
-| `server.FEATURE_KIALI_DISABLE`                  | TBD                                           |      true                                 |
-| `server.ANALYTICS_GOOGLE_CODE`                  | TBD                                           |      none                                 |
+| `server.dockerSecret`                           | Docker secret for pulling the images          |      none                                 |
+| `server.protocol`                               | http/https protocol for accessing the UI      |      http                                 |
+| `server.url`                                    | url/IP address:port for UI                    |      none                                 |
+| `server.apiAuthAccessMode`                   | TBD                                           |      unrestricted                         |
+| `server.serverDefaultAccessGrant`            | TBD                                           |      true                                 |
+| `server.apiUiEnabled`                         | TBD                                           |      true                                 |
+| `server.setupName`                             | TBD                                           |      mayaonprem                     |
+| `server.apiAuthExternalProviderEnabled`     | TBD                                           |      true                                 |
+| `server.apiAuthExternalProviderConfigured`  | TBD                                           |      githubconfig                         |
+| `server.apiAuthInternalProviderEnabled`     | TBD                                           |      false                                |
+| `server.apiAuthInternalProviderConfigured`  | TBD                                           |      none                                 |
+| `server.apiAuthEnabler`                       | TBD                                           |      none                                 |
+| `server.apiAuthGithubClientId`              | TBD                                           |      none                                 |
+| `server.apiAuthGithubClientSecret`          | TBD                                           |      none                                 |
+| `server.apiAuthGoogleClientId`              | TBD                                           |      none                                 |
+| `server.apiAuthGoogleClientSecret`          | TBD                                           |      none                                 |
+| `server.clusterDomain`                         | TBD                                           |      cluster.local                        |
+| `server.featureSubscriptionDisable`           | TBD                                           |      true                                 |
+| `server.subscriptionType`                      | TBD                                           |      none                                 |
+| `server.featureBillingDisable`                | TBD                                           |      true                                 |
+| `server.billingType`                           | TBD                                           |      external                             |
+| `server.featureEmailDisable`                  | TBD                                           |      true                                 |
+| `server.senderEmailAddress`                    | TBD                                           |      none                                 |
+| `server.senderEmailPassword`                  | TBD                                           |      none                                 |
+| `server.featureDocsDisable`                   | TBD                                           |      false                                |
+| `server.docsUrl`                               | TBD                                           |      https://docs.mayaonline.io           |
+| `server.featureChatBotDisable`                | TBD                                           |      true                                 |
+| `server.slackConfigBotClientId`             | TBD                                           |      none                                 |
+| `server.slackConfigBotClientSecret`         | TBD                                           |      none                                 |
+| `server.slackNotificationWelcomeMessage`     | TBD                                           |      none                                 |
+| `server.featureKialiDisable`                  | TBD                                           |      true                                 |
+| `server.analyticsGoogleCode`                  | TBD                                           |      none                                 |
 |                                                 |                                               |                                           |
-| `mysql.storageclass`                            | TBD                                           |      openebs-jiva-default                 |
+| `mysql.storageClass`                            | TBD                                           |      openebs-jiva-default                 |
 |                                                 |                                               |                                           |
-| `elasticsearch.storageclass`                    | TBD                                           |      openebs-hostpath                     |
-| `elasticsearch.replicas`                        | TBD                                           |      1                                    |
+| `elasticSearch.storageClass`                    | TBD                                           |      openebs-hostpath                     |
+| `elasticSearch.replicas`                        | TBD                                           |      1                                    |
 |                                                 |                                               |                                           |
-| `cassandra.storageclass`                        | TBD                                           |      openebs-hostpath                     |
+| `cassandra.storageClass`                        | TBD                                           |      openebs-hostpath                     |
 | `cassandra.replicas`                            | TBD                                           |      1                                    |
 |                                                 |                                               |                                           |
-| `mayastore.storageclass`                        | TBD                                           |      cstor-storage-class                  |
+| `mayaStore.storageClass`                        | TBD                                           |      cstor-storage-class                  |
 |                                                 |                                               |                                           |
-| `grafana.storageclass`                          | TBD                                           |      cstor-storage-class                  |
+| `grafana.storageClass`                          | TBD                                           |      cstor-storage-class                  |
 |                                                 |                                               |                                           |
-| `cortex.replicationfactor`                      | TBD                                           |      1                                    |
+| `cortex.replicationFactor`                      | TBD                                           |      1                                    |
 | `cortex.timeout`                                | TBD                                           |      20s                                  |
 |                                                 |                                               |                                           |
-| `alertstore.replicationfactor`                  | TBD                                           |      1                                    |
+| `alertStore.replicationFactor`                  | TBD                                           |      1                                    |
 -----------------------------------------------------------------------------------------------------------------------------------------------
 
 

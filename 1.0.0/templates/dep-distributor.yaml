@@ -2,7 +2,6 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: distributor
-  namespace: {{ .Values.server.namespace }}
 spec:
   replicas: 1
   template:
@@ -41,7 +40,7 @@ spec:
           do
              echo "wating for consul"
              sleep 2;
-             export COUNT=$(kubectl get pods -l name=consul -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w consul | wc -l)
+             export COUNT=$(kubectl get pods -l name=consul -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w consul | wc -l)
              echo $COUNT
           done
       - name: di-wait-for-ingester
@@ -57,7 +56,7 @@ spec:
           do
              echo "wating for ingester"
              sleep 2;
-             export COUNT=$(kubectl get pods -l name=ingester -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w ingester | wc -l)
+             export COUNT=$(kubectl get pods -l name=ingester -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w ingester | wc -l)
              echo $COUNT
           done
       containers:
@@ -67,10 +66,10 @@ spec:
         args:
         - -log.level=debug
         - -server.http-listen-port=80
-        - -consul.hostname=consul.{{ .Values.server.namespace }}.svc.cluster.local:8500
+        - -consul.hostname=consul.{{ .Release.Namespace }}.svc.cluster.local:8500
         - -distributor.replication-factor=1
         ports:
         - containerPort: 80
       imagePullSecrets:
-      - name: {{ .Values.server.dockersecret }}
+      - name: {{ .Values.server.dockerSecret }}
 

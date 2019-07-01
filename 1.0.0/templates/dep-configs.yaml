@@ -2,7 +2,6 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: configs
-  namespace: {{ .Values.server.namespace }}
 spec:
   replicas: 1
   template:
@@ -42,7 +41,7 @@ spec:
           do
              echo "wating for configs-db"
              sleep 2;
-             export COUNT=$(kubectl get pods -l name=configs-db -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w configs-db | wc -l)
+             export COUNT=$(kubectl get pods -l name=configs-db -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w configs-db | wc -l)
              echo $COUNT
           done
       containers:
@@ -51,10 +50,10 @@ spec:
         imagePullPolicy: Always
         args:
         - -server.http-listen-port=80
-        - -database.uri=postgres://postgres@configs-db.{{ .Values.server.namespace }}.svc.cluster.local/configs?sslmode=disable
+        - -database.uri=postgres://postgres@configs-db.{{ .Release.Namespace }}.svc.cluster.local/configs?sslmode=disable
         - -database.migrations=/migrations
         ports:
         - containerPort: 80
       imagePullSecrets:
-      - name: {{ .Values.server.dockersecret }}
+      - name: {{ .Values.server.dockerSecret }}
 

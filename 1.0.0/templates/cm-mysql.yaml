@@ -4,7 +4,6 @@ metadata:
   labels:
     app: mysql
   name: mysql
-  namespace: {{ .Values.server.namespace }}
 data:
   master.cnf: |
     # Apply this config only on the master.

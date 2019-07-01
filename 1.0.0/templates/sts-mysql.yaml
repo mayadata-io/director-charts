@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mysql
-  namespace: {{ .Values.server.namespace }}
 spec:
   replicas: 1
   selector:
@@ -197,7 +196,7 @@ spec:
           name: mysql
         name: config-map
       imagePullSecrets:
-      - name: {{ .Values.server.dockersecret }}
+      - name: {{ .Values.server.dockerSecret }}
   volumeClaimTemplates:
   - metadata:
       creationTimestamp: null
@@ -207,6 +206,6 @@ spec:
       - ReadWriteOnce
       resources:
         requests:
-          storage: {{ .Values.mysql.storagecapacity }}
-      storageClassName: {{ .Values.mysql.storageclass }}
+          storage: {{ .Values.mysql.storageCapacity }}
+      storageClassName: {{ .Values.mysql.storageClass }}
 

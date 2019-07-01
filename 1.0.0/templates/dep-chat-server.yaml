@@ -4,7 +4,6 @@ metadata:
   labels:
     app: chat-server
   name: chat-server
-  namespace: {{ .Values.server.namespace }}
 spec:
   selector:
     matchLabels:
@@ -44,5 +43,5 @@ spec:
             cpu: 100m
             memory: 256Mi
       imagePullSecrets:
-      - name: {{ .Values.server.dockersecret }}
+      - name: {{ .Values.server.dockerSecret }}
 
