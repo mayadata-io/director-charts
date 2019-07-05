@@ -14,7 +14,6 @@ items:
         proxy_set_header X-Scope-OrgID $remote_user;
       nginx.ingress.kubernetes.io/rewrite-target: /
       nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    generation: 5
     name: maya-auth-ingress
   spec:
     rules:
