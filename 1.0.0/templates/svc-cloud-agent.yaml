@@ -5,7 +5,6 @@ metadata:
   labels:
     name: cloud-agent
     app: cloud-agent
-  namespace: {{ .Values.server.namespace }}
 spec:
   ports:
     - name: app

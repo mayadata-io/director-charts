@@ -2,7 +2,6 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: alertstore-tablemanager
-  namespace: {{ .Values.server.namespace }}
 spec:
   replicas: 1
   template:
@@ -41,7 +40,7 @@ spec:
           do
              echo "wating for cassandra"
              sleep 2;
-             export COUNT=$(kubectl get pods -l app=cassandra -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w cassandra | wc -l)
+             export COUNT=$(kubectl get pods -l app=cassandra -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w cassandra | wc -l)
              echo $COUNT
           done
       containers:
@@ -51,12 +50,12 @@ spec:
         args:
         - -server.http-listen-port=80
         - -storage.storage-client=cassandra
-        - -cassandra.addresses=cassandra.{{ .Values.server.namespace }}.svc.cluster.local
+        - -cassandra.addresses=cassandra.{{ .Release.Namespace }}.svc.cluster.local
         - -cassandra.keyspace=mayaalerts
-        - -cassandra.replication-factor={{ .Values.alertstore.replicationfactor }}
+        - -cassandra.replication-factor={{ .Values.alertStore.replicationFactor }}
         - -log.level=debug
         ports:
         - containerPort: 80
       imagePullSecrets:
-      - name: {{ .Values.server.dockersecret }}
+      - name: {{ .Values.server.dockerSecret }}
 

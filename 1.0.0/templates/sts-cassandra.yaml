@@ -4,7 +4,6 @@ metadata:
   name: cassandra
   labels:
     app: cassandra
-  namespace: {{ .Values.server.namespace }}
 spec:
   serviceName: cassandra
   replicas: {{ .Values.cassandra.replicas }}
@@ -54,7 +53,7 @@ spec:
           - name: HEAP_NEWSIZE
             value: 100M
           - name: CASSANDRA_SEEDS
-            value: "cassandra-0.cassandra.{{ .Values.server.namespace }}.svc.cluster.local"
+            value: "cassandra-0.cassandra.{{ .Release.Namespace }}.svc.cluster.local"
           - name: CASSANDRA_CLUSTER_NAME
             value: "K8Demo"
           - name: CASSANDRA_DC
@@ -87,8 +86,8 @@ spec:
       name: cassandra-data
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: {{ .Values.cassandra.storageclass }}
+      storageClassName: {{ .Values.cassandra.storageClass }}
       resources:
         requests:
-          storage: {{ .Values.cassandra.storagecapacity }}
+          storage: {{ .Values.cassandra.storageCapacity }}
 

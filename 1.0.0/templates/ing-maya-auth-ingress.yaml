@@ -14,13 +14,7 @@ items:
         proxy_set_header X-Scope-OrgID $remote_user;
       nginx.ingress.kubernetes.io/rewrite-target: /
       nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    creationTimestamp: 2019-05-13T14:30:48Z
-    generation: 5
     name: maya-auth-ingress
-    namespace: {{ .Values.server.namespace }}
-    resourceVersion: "4416837"
-    selfLink: /apis/extensions/v1beta1/namespaces/{{ .Values.server.namespace }}/ingresses/maya-auth-ingress
-    uid: b3d51ca4-758b-11e9-9b05-0cc47a805c04
   spec:
     rules:
     - http:
@@ -64,7 +58,6 @@ items:
       nginx.ingress.kubernetes.io/rewrite-target: /
       nginx.ingress.kubernetes.io/ssl-redirect: "false"
     name: maya-nginx-ingress
-    namespace: {{ .Values.server.namespace }} 
   spec:
     rules:
     - http:
@@ -94,6 +87,3 @@ items:
             servicePort: 8686
           path: /report/
 kind: List
-metadata:
-  resourceVersion: ""
-  selfLink: ""

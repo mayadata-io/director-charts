@@ -12,6 +12,5 @@ metadata:
   labels:
     app: chat-server
   name: chat-server
-  namespace: {{ .Values.server.namespace }}
 type: Opaque
 

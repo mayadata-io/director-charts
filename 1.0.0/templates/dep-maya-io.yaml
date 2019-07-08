@@ -2,7 +2,6 @@ apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: maya-io
-  namespace: {{ .Values.server.namespace }}
 spec:
   replicas: 1
   strategy:
@@ -43,7 +42,7 @@ spec:
           do
              echo "wating for mysql"
              sleep 2;
-             export COUNT=$(kubectl get pods -l app=mysql -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w mysql | wc -l)
+             export COUNT=$(kubectl get pods -l app=mysql -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w mysql | wc -l)
              echo $COUNT
           done
       - name: mios-wait-for-chat-server
@@ -59,7 +58,7 @@ spec:
           do
              echo "wating for chat-server"
              sleep 2;
-             export COUNT=$(kubectl get pods -l app=chat-server -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w chat-server | wc -l)
+             export COUNT=$(kubectl get pods -l app=chat-server -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w chat-server | wc -l)
              echo $COUNT
           done
       - name: mios-wait-for-maya-grafana-service
@@ -75,7 +74,7 @@ spec:
           do
              echo "wating for maya-grafana"
              sleep 2;
-             export COUNT=$(kubectl get pods -l app=maya-grafana -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w maya-grafana | wc -l)
+             export COUNT=$(kubectl get pods -l app=maya-grafana -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w maya-grafana | wc -l)
              echo $COUNT
           done
       - name: mios-wait-for-maya-ui
@@ -91,7 +90,7 @@ spec:
           do
              echo "wating for maya-ui"
              sleep 2;
-             export COUNT=$(kubectl get pods -l app=maya-ui -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w maya-ui | wc -l)
+             export COUNT=$(kubectl get pods -l app=maya-ui -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w maya-ui | wc -l)
              echo $COUNT
           done
       - name: mios-wait-for-elasticsearch-logging
@@ -107,7 +106,7 @@ spec:
           do
              echo "wating for elasticsearch-logging"
              sleep 2;
-             export COUNT=$(kubectl get pods -l k8s-app=elasticsearch-logging -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w elasticsearch-logging | wc -l)
+             export COUNT=$(kubectl get pods -l k8s-app=elasticsearch-logging -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w elasticsearch-logging | wc -l)
              echo $COUNT
           done
       - name: mios-wait-for-kibana-logging
@@ -123,7 +122,7 @@ spec:
           do
              echo "wating for kibana-logging"
              sleep 2;
-             export COUNT=$(kubectl get pods -l k8s-app=kibana-logging -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w kibana-logging | wc -l)
+             export COUNT=$(kubectl get pods -l k8s-app=kibana-logging -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w kibana-logging | wc -l)
              echo $COUNT
           done
       - name: mios-wait-for-alertstore-tablemanager
@@ -139,14 +138,14 @@ spec:
           do
              echo "wating for alertstore-tablamanager"
              sleep 2;
-             export COUNT=$(kubectl get pods -l name=alertstore-tablemanager -n {{ .Values.server.namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w alertstore-tablemanager | wc -l)
+             export COUNT=$(kubectl get pods -l name=alertstore-tablemanager -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w alertstore-tablemanager | wc -l)
              echo $COUNT
           done
       containers:
         - name: maya-io
           args:
             - "--db-host"
-            - "mysql.{{ .Values.server.namespace }}.svc.cluster.local"
+            - "mysql.{{ .Release.Namespace }}.svc.cluster.local"
             - "--db-user"
             - "maya"
             - "--db-pass"
@@ -164,7 +163,7 @@ spec:
             mountPath: /var/lib/maya/etc/maya.properties
             subPath: maya.properties
       imagePullSecrets:
-      - name: {{ .Values.server.dockersecret }}
+      - name: {{ .Values.server.dockerSecret }}
       volumes:
       - name: maya-store
         persistentVolumeClaim:

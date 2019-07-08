@@ -4,70 +4,69 @@
 
 server:
   release: 1.0.0-ee
-  dockersecret: mayaonprem-registry-secret
-  namespace: default
-  PROTOCOL: http
-  URL:
+  dockerSecret: mayaonprem-registry-secret
+  protocol: http
+  url:
   httpNodePort: 30380
   httpsNodePort: 30381
-  API_AUTH_ACCESS_MODE: unrestricted
-  SERVER_DEFAULT_ACCESS_GRANT: true
-  API_UI_ENABLED: true
-  SETUP_NAME: mayaonprem
-  API_AUTH_EXTERNAL_PROVIDER_ENABLED: true
-  API_AUTH_EXTERNAL_PROVIDER_CONFIGURED: githubconfig
-  API_AUTH_INTERNAL_PROVIDER_ENABLED: false
-  API_AUTH_INTERNAL_PROVIDER_CONFIGURED:
-  API_AUTH_ENABLER:
-  API_AUTH_GITHUB_CLIENT_ID:
-  API_AUTH_GITHUB_CLIENT_SECRET:
-  API_AUTH_GOOGLE_CLIENT_ID:
-  API_AUTH_GOOGLE_CLIENT_SECRET:
-  CLUSTER_DOMAIN: cluster.local
-  FEATURE_SUBSCRIPTION_DISABLE: true
-  SUBSCRIPTION_TYPE:
-  FEATURE_BILLING_DISABLE: true
-  BILLING_TYPE: external
-  FEATURE_EMAIL_DISABLE: true
-  SENDER_EMAIL_ADRESS:
-  SENDER_EMAIL_PASSWORD:
-  FEATURE_DOCS_DISABLE: false
-  DOCS_URL: https://docs.mayaonline.io
-  FEATURE_CHATBOT_DISABLE: false
-  SLACK_CONFIG_BOT_CLIENT_ID:
-  SLACK_CONFIG_BOT_CLIENT_SECRET:
-  SLACK_NOTIFICATION_WELCOME_MESSAGE:
-  FEATURE_KIALI_DISABLE: true
-  ANALYTICS_GOOGLE_CODE:
+  apiAuthAccessMode: unrestricted
+  serverDefaultAccessGrant: true
+  apiUiEnabled: true
+  setupName: mayaonprem
+  apiAuthExternalProviderEnabled: true
+  apiAuthExternalProviderConfigured: githubconfig
+  apiAuthInternalProviderEnabled: false
+  apiAuthInternalProviderConfigured:
+  apiAuthEnabler:
+  apiAuthGithubClientId:
+  apiAuthGithubClientSecret:
+  apiAuthGoogleClientId:
+  apiAuthGoogleClientSecret:
+  clusterDomain: cluster.local
+  featureSubscriptionDisable: true
+  subscriptionType:
+  featureBillingDisable: true
+  billingType: external
+  featureEmailDisable: true
+  senderEmailAddress:
+  senderEmailPassword:
+  featureDocsDisable: false
+  docsUrl: https://docs.mayaonline.io
+  featureChatBotDisable: true
+  slackConfigBotClientId:
+  slackConfigBotClientSecret:
+  slackNotificationWelcomeMessage:
+  featureKialiDisable: true
+  analyticsGoogleCode:
 
 mysql:
-  storageclass: openebs-jiva-default
-  storagecapacity: 50Gi
+  storageClass: openebs-jiva-default
+  storageCapacity: 50Gi
 
-elasticsearch:
-  storageclass: openebs-hostpath
-  storagecapacity: 50Gi
+elasticSearch:
+  storageClass: openebs-hostpath
+  storageCapacity: 50Gi
   replicas: 1
 
 cassandra:
-  storageclass: openebs-hostpath
-  storagecapacity: 50Gi
+  storageClass: openebs-hostpath
+  storageCapacity: 50Gi
   replicas: 1
 
-mayastore:
-  storageclass: cstor-storage-class
-  storagecapacity: 10Gi
+mayaStore:
+  storageClass: cstor-storage-class
+  storageCapacity: 10Gi
 
 grafana:
-  storageclass: cstor-storage-class
-  storagecapacity: 50Gi
+  storageClass: cstor-storage-class
+  storageCapacity: 50Gi
 
 cortex:
-  replicationfactor: 1
+  replicationFactor: 1
   timeout: 5s
 
-alertstore:
-  replicationfactor: 1
+alertStore:
+  replicationFactor: 1
 
 ingester:
   replicas: 1

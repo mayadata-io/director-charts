@@ -4,7 +4,6 @@ metadata:
   labels:
     k8s-app: kibana-logging
   name: kibana-logging
-  namespace: {{ .Values.server.namespace }}
 spec:
   ports:
   - port: 5601

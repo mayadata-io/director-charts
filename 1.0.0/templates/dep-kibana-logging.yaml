@@ -4,7 +4,6 @@ metadata:
   labels:
     k8s-app: kibana-logging
   name: kibana-logging
-  namespace: {{ .Values.server.namespace }}
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -35,5 +34,5 @@ spec:
           requests:
             cpu: 100m
       imagePullSecrets:
-      - name: {{ .Values.server.dockersecret }}
+      - name: {{ .Values.server.dockerSecret }}
 
