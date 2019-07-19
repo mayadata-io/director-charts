@@ -15,16 +15,16 @@ server:
   setupName: mayaonprem
   apiAuthExternalProviderEnabled: true
   apiAuthExternalProviderConfigured: githubconfig
-  apiAuthInternalProviderEnabled: false
-  apiAuthInternalProviderConfigured:
+  apiAuthInternalProviderEnabled: true
+  apiAuthInternalProviderConfigured: localAuthConfig
   apiAuthEnabler:
   apiAuthGithubClientId:
   apiAuthGithubClientSecret:
   apiAuthGoogleClientId:
   apiAuthGoogleClientSecret:
   clusterDomain: cluster.local
-  featureSubscriptionDisable: true
-  subscriptionType:
+  featureSubscriptionDisable: false
+  subscriptionType: internal
   featureBillingDisable: true
   billingType: external
   featureEmailDisable: true
@@ -38,27 +38,33 @@ server:
   slackNotificationWelcomeMessage:
   featureKialiDisable: true
   analyticsGoogleCode:
+  autoconnectLocalCluster: true
 
 mysql:
-  storageClass: openebs-jiva-default
+  #storageClass: openebs-jiva-default
+  storageClass: standard
   storageCapacity: 50Gi
 
 elasticSearch:
-  storageClass: openebs-hostpath
+  #storageClass: openebs-hostpath
+  storageClass: standard
   storageCapacity: 50Gi
   replicas: 1
 
 cassandra:
-  storageClass: openebs-hostpath
+  #storageClass: openebs-hostpath
+  storageClass: standard
   storageCapacity: 50Gi
   replicas: 1
 
 mayaStore:
-  storageClass: cstor-storage-class
+  #storageClass: cstor-storage-class
+  storageClass: standard
   storageCapacity: 10Gi
 
 grafana:
-  storageClass: cstor-storage-class
+  #storageClass: cstor-storage-class
+  storageClass: standard
   storageCapacity: 50Gi
 
 cortex:

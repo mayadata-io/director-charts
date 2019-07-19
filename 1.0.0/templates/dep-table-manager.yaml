@@ -51,7 +51,7 @@ spec:
         - -server.http-listen-port=80
         - -dynamodb.original-table-name=cortex
         - -chunk.storage-client=cassandra
-        - -cassandra.addresses=cassandra.{{ .Release.Namespace }}.svc.cluster.local
+        - -cassandra.addresses=cassandra.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}
         - -cassandra.keyspace=mayacortex
         - -cassandra.replication-factor={{ .Values.cortex.replicationFactor }}
         - -cassandra.timeout={{ .Values.cortex.timeout }}

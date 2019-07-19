@@ -34,8 +34,8 @@ The following table lists the configurable parameters of the MayaOnprem chart an
 | `server.setupName`                             | TBD                                           |      mayaonprem                     |
 | `server.apiAuthExternalProviderEnabled`     | TBD                                           |      true                                 |
 | `server.apiAuthExternalProviderConfigured`  | TBD                                           |      githubconfig                         |
-| `server.apiAuthInternalProviderEnabled`     | TBD                                           |      false                                |
-| `server.apiAuthInternalProviderConfigured`  | TBD                                           |      none                                 |
+| `server.apiAuthInternalProviderEnabled`     |  Enable local authentication                  |      true                                     |
+| `server.apiAuthInternalProviderConfigured`  |  Type of local authentication (u/p, ldap etc) |      localAuthConfig                          |
 | `server.apiAuthEnabler`                       | TBD                                           |      none                                 |
 | `server.apiAuthGithubClientId`              | TBD                                           |      none                                 |
 | `server.apiAuthGithubClientSecret`          | TBD                                           |      none                                 |
@@ -57,18 +57,19 @@ The following table lists the configurable parameters of the MayaOnprem chart an
 | `server.slackNotificationWelcomeMessage`     | TBD                                           |      none                                 |
 | `server.featureKialiDisable`                  | TBD                                           |      true                                 |
 | `server.analyticsGoogleCode`                  | TBD                                           |      none                                 |
+| `server.autoconnectLocalCluster`                | Autoconnect local cluster to openebs director |       true                                |
 |                                                 |                                               |                                           |
-| `mysql.storageClass`                            | TBD                                           |      openebs-jiva-default                 |
+| `mysql.storageClass`                            | TBD                                           |      standard                             |
 |                                                 |                                               |                                           |
-| `elasticSearch.storageClass`                    | TBD                                           |      openebs-hostpath                     |
+| `elasticSearch.storageClass`                    | TBD                                           |      standard                             |
 | `elasticSearch.replicas`                        | TBD                                           |      1                                    |
 |                                                 |                                               |                                           |
-| `cassandra.storageClass`                        | TBD                                           |      openebs-hostpath                     |
+| `cassandra.storageClass`                        | TBD                                           |      standard                             |
 | `cassandra.replicas`                            | TBD                                           |      1                                    |
 |                                                 |                                               |                                           |
-| `mayaStore.storageClass`                        | TBD                                           |      cstor-storage-class                  |
+| `mayaStore.storageClass`                        | TBD                                           |      standard                             |
 |                                                 |                                               |                                           |
-| `grafana.storageClass`                          | TBD                                           |      cstor-storage-class                  |
+| `grafana.storageClass`                          | TBD                                           |      standard                             |
 |                                                 |                                               |                                           |
 | `cortex.replicationFactor`                      | TBD                                           |      1                                    |
 | `cortex.timeout`                                | TBD                                           |      20s                                  |

@@ -66,7 +66,7 @@ spec:
         args:
         - -log.level=debug
         - -server.http-listen-port=80
-        - -consul.hostname=consul.{{ .Release.Namespace }}.svc.cluster.local:8500
+        - -consul.hostname=consul.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}:8500
         - -distributor.replication-factor=1
         ports:
         - containerPort: 80
