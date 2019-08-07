@@ -114,12 +114,12 @@ spec:
         args:
         - -log.level=debug
         - -server.http-listen-port=80
-        - -ruler.configs.url=http://configs.{{ .Release.Namespace }}.svc.cluster.local:80
-        - -ruler.alertmanager-url=http://alertmanager.{{ .Release.Namespace }}.svc.cluster.local/api/prom/alertmanager/
-        - -consul.hostname=consul.{{ .Release.Namespace }}.svc.cluster.local:8500
+        - -ruler.configs.url=http://configs.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}:80
+        - -ruler.alertmanager-url=http://alertmanager.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}/api/prom/alertmanager/
+        - -consul.hostname=consul.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}:8500
         - -dynamodb.original-table-name=cortex
         - -chunk.storage-client=cassandra
-        - -cassandra.addresses=cassandra.{{ .Release.Namespace }}.svc.cluster.local
+        - -cassandra.addresses=cassandra.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}
         - -cassandra.keyspace=mayacortex
         - -cassandra.replication-factor={{ .Values.cortex.replicationFactor }}
         - -cassandra.timeout={{ .Values.cortex.timeout }}
@@ -131,7 +131,7 @@ spec:
         - -dynamodb.v5-schema-from=2017-02-22
         - -dynamodb.v6-schema-from=2017-03-19
         - -dynamodb.chunk-table.from=2017-04-17
-        - -memcached.hostname=memcached.{{ .Release.Namespace }}.svc.cluster.local
+        - -memcached.hostname=memcached.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}
         - -memcached.timeout=100ms
         - -memcached.service=memcached
         - -distributor.replication-factor=1

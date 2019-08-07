@@ -50,7 +50,7 @@ spec:
         args:
         - -server.http-listen-port=80
         - -storage.storage-client=cassandra
-        - -cassandra.addresses=cassandra.{{ .Release.Namespace }}.svc.cluster.local
+        - -cassandra.addresses=cassandra.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}
         - -cassandra.keyspace=mayaalerts
         - -cassandra.replication-factor={{ .Values.alertStore.replicationFactor }}
         - -log.level=debug

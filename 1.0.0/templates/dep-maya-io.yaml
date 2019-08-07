@@ -145,7 +145,7 @@ spec:
         - name: maya-io
           args:
             - "--db-host"
-            - "mysql.{{ .Release.Namespace }}.svc.cluster.local"
+            - "mysql.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}"
             - "--db-user"
             - "maya"
             - "--db-pass"
