@@ -1,7 +1,7 @@
 apiVersion: v1
-version: 1.0.0
+version: 1.1.0
 name: mayaonprem
-appVersion: 1.0.0
+appVersion: 1.1.0
 description: This is an on-premise installation of MayaOnline
 icon: https://raw.githubusercontent.com/mayadata-io/mayaonprem-charts/master/mayaonprem-logo.png
 home: https://www.mayadata.io/

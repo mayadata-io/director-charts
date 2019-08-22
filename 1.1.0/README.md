@@ -10,8 +10,6 @@ This chart bootstraps MayaOnprem on a [Kubernetes](http://kubernetes.io) cluster
 ## Prerequisites
 - Kubernetes 1.12.0+ with RBAC enabled.
 - iSCSI PV support in the underlying infrastructure.
-- Deploy openebs(0.9.0 and above) and create a storagepoolclaim using external disks and create a storageClass name cstor-storage-class.
-- Create a github Oauth app and have the client id,secret and auth enable ready.
 - Create a secret with docker registry credentials and use it during helm install as parameter for value 'dockerSecret'.
 
 ## Installing MayaOnprem
