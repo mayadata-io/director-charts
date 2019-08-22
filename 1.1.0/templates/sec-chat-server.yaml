@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  ADMIN_API_KEY: T0RsRk5qWkVRMFZGT0RkQ1JUTkdOekV3TVRJNmNUTjJkM2hsUW5Wa1NFaFJkbWd5WlhWYWNuaDFSRUp0TVVKeU9YYzJaa05HZFhsMWIyaFNNdz09
+  MAYA_SERVER_IP: aHR0cHM6Ly9hcHAubWF5YW9ubGluZS5pby92My8=
+  SERVER_ADDRESS: bWF5YW9ubGluZS5pbw==
+  SERVER_NAME: TWF5YU9ubGluZQ==
+  SIGNING_SECRET: OWNlZTAyNWI1ZTcxNmIxYjk4MDRiZGZmNGEyNzYyMzQ=
+  SLASH_COMMAND: L21heWE=
+  SUPPORT_EMAIL: c3VwcG9ydEBtYXlhZGF0YS5pbw==
+kind: Secret
+metadata:
+  labels:
+    app: chat-server
+  name: chat-server
+type: Opaque
+

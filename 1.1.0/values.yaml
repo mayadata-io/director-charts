@@ -1,0 +1,83 @@
+# Default values for DirectorOnPrem.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+server:
+  release: 1.1.0-ee
+  dockerSecret: directoronprem-registry-secret
+  protocol: http
+  url:
+  httpNodePort: 30380
+  httpsNodePort: 30381
+  apiAuthAccessMode: unrestricted
+  serverDefaultAccessGrant: true
+  apiUiEnabled: true
+  setupName: directoronprem
+  apiAuthExternalProviderEnabled: false
+  apiAuthExternalProviderConfigured:
+  apiAuthInternalProviderEnabled: true
+  apiAuthInternalProviderConfigured: localAuthConfig
+  apiAuthEnabler:
+  apiAuthGithubClientId:
+  apiAuthGithubClientSecret:
+  apiAuthGoogleClientId:
+  apiAuthGoogleClientSecret:
+  clusterDomain: cluster.local
+  featureSubscriptionDisable: false
+  subscriptionType: internal
+  featureBillingDisable: true
+  billingType: external
+  featureEmailDisable: true
+  senderEmailAddress:
+  senderEmailPassword:
+  featureDocsDisable: false
+  docsUrl: https://docs.mayaonline.io
+  featureChatBotDisable: true
+  slackConfigBotClientId:
+  slackConfigBotClientSecret:
+  slackNotificationWelcomeMessage:
+  featureKialiDisable: true
+  analyticsGoogleCode:
+  autoconnectLocalCluster: true
+
+mysql:
+  #storageClass: openebs-jiva-default
+  storageClass: standard
+  storageCapacity: 50Gi
+
+elasticSearch:
+  #storageClass: openebs-hostpath
+  storageClass: standard
+  storageCapacity: 50Gi
+  replicas: 1
+
+cassandra:
+  #storageClass: openebs-hostpath
+  storageClass: standard
+  storageCapacity: 50Gi
+  replicas: 1
+
+mayaStore:
+  #storageClass: cstor-storage-class
+  storageClass: standard
+  storageCapacity: 10Gi
+
+grafana:
+  #storageClass: cstor-storage-class
+  storageClass: standard
+  storageCapacity: 50Gi
+
+cortex:
+  replicationFactor: 1
+  timeout: 5s
+
+alertStore:
+  replicationFactor: 1
+
+ingester:
+  replicas: 1
+
+querier:
+  replicas: 1
+
+

@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: maya-grafana
+  name: maya-grafana
+spec:
+  template:
+    metadata:
+      labels:
+        app: maya-grafana
+    spec:
+      containers:
+      - env:
+        - name: GF_AUTH_BASIC_ENABLED
+          value: "true"
+        - name: GF_AUTH_ANONYMOUS_ENABLED
+          value: "false"
+        image: registry.mayadata.io/maya-grafana:{{ .Values.server.release }}
+        imagePullPolicy: Always
+        name: master-grafana
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - mountPath: /etc/grafana
+          name: config-volume
+        - mountPath: /var/lib/grafana
+          name: maya-grafana-store
+      securityContext:
+        fsGroup: 107
+        runAsUser: 104
+      imagePullSecrets:
+      - name: {{ .Values.server.dockerSecret }}
+      volumes:
+      - configMap:
+          name: maya-grafana-cfgmap
+        name: config-volume
+      - name: maya-grafana-store
+        persistentVolumeClaim:
+          claimName: grafana-claim
+
