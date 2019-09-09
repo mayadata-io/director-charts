@@ -21,6 +21,8 @@ spec:
       - env:
         - name: SERVER_BASEPATH
           value: /kibana
+        - name: OWN_HOME_ELASTICSEARCH_URL
+          value: http://elasticsearch-logging:9200/
         image: registry.mayadata.io/kibana:{{ .Values.server.release }}
         imagePullPolicy: Always
         name: kibana-logging
