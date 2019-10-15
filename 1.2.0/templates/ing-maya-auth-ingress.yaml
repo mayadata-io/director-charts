@@ -1,0 +1,116 @@
+apiVersion: v1
+items:
+- apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+      nginx.ingress.kubernetes.io/auth-realm: Authentication Required
+      nginx.ingress.kubernetes.io/auth-response-headers: username
+      nginx.ingress.kubernetes.io/auth-secret: basic-auth
+      nginx.ingress.kubernetes.io/auth-type: basic
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        proxy_set_header X-Scope-OrgID $remote_user;
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    name: maya-auth-ingress
+  spec:
+    rules:
+    - http:
+        paths:
+        - backend:
+            serviceName: distributor
+            servicePort: 80
+          path: /maya-cortex-push/
+        - backend:
+            serviceName: querier
+            servicePort: 80
+          path: /maya-cortex-pull/
+        - backend:
+            serviceName: alertmanager
+            servicePort: 80
+          path: /maya-cortex-am/
+        - backend:
+            serviceName: configs
+            servicePort: 80
+          path: /maya-cortex-configs/
+        - backend:
+            serviceName: alertstore
+            servicePort: 80
+          path: /alertstore/
+        - backend:
+            serviceName: alertstore-tablemanager
+            servicePort: 80
+          path: /alertstore-tablemanager/
+        - backend:
+            serviceName: retrieval
+            servicePort: 80
+          path: /retrieval/
+- apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers X-Frame-Options SAMEORIGIN;
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    name: maya-nginx-ingress
+  spec:
+    rules:
+    - http:
+        paths:
+        - backend:
+            serviceName: maya-io
+            servicePort: 8080
+          path: /
+        - backend:
+            serviceName: echoheaders
+            servicePort: 80
+          path: /echo/
+        - backend:
+            serviceName: maya-ui
+            servicePort: 80
+          path: /ui/
+        - backend:
+            serviceName: chat-server
+            servicePort: 8080
+          path: /chat-server/
+        - backend:
+            serviceName: killbill-server
+            servicePort: 8080
+          path: /killbill-server/
+        - backend:
+            serviceName: maya-grafana-service
+            servicePort: 8686
+          path: /report/
+- apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      nginx.ingress.kubernetes.io/proxy-body-size: "20m"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      kubernetes.io/tls-acme: "true"
+      nginx.ingress.kubernetes.io/auth-type: basic
+      nginx.ingress.kubernetes.io/auth-secret: basic-auth
+      nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
+      nginx.ingress.kubernetes.io/auth-response-headers: username
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        proxy_set_header X-Scope-OrgID $remote_user;
+        proxy_set_header x-proxy-roles "";
+    name: maya-elasticsearch-ingress
+  spec:
+    rules:
+    - http:
+        paths:
+        - path: /elasticsearch/
+          backend:
+            serviceName: elasticsearch-logging
+            servicePort: 9200
+kind: List
