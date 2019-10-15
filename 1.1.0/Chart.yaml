@@ -12,7 +12,7 @@ keywords:
   - cloud-native-storage
   - storage
 sources:
-  - https://github.com/mayadata-io/mayaonprem-charts.git
+  - https://github.com/mayadata-io/director-charts.git
 maintainers:
   - name: moteesh
     email: moteesh.reddy@mayadata.io
