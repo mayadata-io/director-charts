@@ -1,0 +1,24 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: cloud-agent
+  labels:
+    name: cloud-agent
+    app: cloud-agent
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: cloud-agent
+        app: cloud-agent
+    spec:
+      containers:
+        - name: cloud-agent
+          image: registry.mayadata.io/cloud-agent:{{ .Values.server.release }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8880
+              protocol: TCP
+      imagePullSecrets:
+      - name: {{ .Values.server.dockerSecret }}

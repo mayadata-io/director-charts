@@ -1,0 +1,75 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: distributor
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: distributor
+    spec:
+      serviceAccountName: sa-maya-io
+      initContainers:
+      - name: di-wait-for-crb
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}')
+          echo $MAYA
+          until [ ! -z "$MAYA" ]
+          do
+             echo "wating for ClusterRoleBinding"
+             sleep 1;
+             export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}')
+             echo $MAYA
+          done
+      - name: di-wait-for-consul
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for consul"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l name=consul -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w consul | wc -l)
+             echo $COUNT
+          done
+      - name: di-wait-for-ingester
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for ingester"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l name=ingester -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w ingester | wc -l)
+             echo $COUNT
+          done
+      containers:
+      - name: distributor
+        image: quay.io/cortexproject/distributor:master-590e72c6
+        imagePullPolicy: IfNotPresent
+        args:
+        - -log.level=debug
+        - -server.http-listen-port=80
+        - -consul.hostname=consul.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}:8500
+        - -distributor.replication-factor=1
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: {{ .Values.server.dockerSecret }}
+
