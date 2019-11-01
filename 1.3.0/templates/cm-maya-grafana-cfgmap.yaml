@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: maya-grafana-cfgmap
+data:
+  grafana.ini: |
+    #################################### Server ####################################
+    [server]
+    # The public facing domain name used to access grafana from a browser
+    domain = {{ .Values.server.url }}
+    # If you use reverse proxy and sub path specify full url (with sub path)
+    root_url = %(protocol)s://%(domain)s:/grafana
+    [users]
+    auto_assign_org = false
+    # Default UI theme ("dark" or "light")
+    default_theme = light
+    [auth.proxy]
+    enabled = true
+    header_name = X-Scope-OrgID
+    header_property = username
+    auto_sign_up = true
+    disable_signout_menu = true
+    disable_login_form = true
+

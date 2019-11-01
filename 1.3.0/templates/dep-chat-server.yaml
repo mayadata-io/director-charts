@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: chat-server
+  name: chat-server
+spec:
+  selector:
+    matchLabels:
+      app: chat-server
+  template:
+    metadata:
+      labels:
+        app: chat-server
+    spec:
+      containers:
+      - env:
+        - name: ADMIN_API_KEY
+          valueFrom:
+            secretKeyRef:
+              key: ADMIN_API_KEY
+              name: chat-server
+        - name: SIGNING_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: SIGNING_SECRET
+              name: chat-server
+        - name: MAYA_SERVER_IP
+          valueFrom:
+            secretKeyRef:
+              key: MAYA_SERVER_IP
+              name: chat-server
+        - name: SLASH_COMMAND
+          valueFrom:
+            secretKeyRef:
+              key: SLASH_COMMAND
+              name: chat-server
+        image: registry.mayadata.io/maya-chatops:{{ .Values.server.release }}
+        imagePullPolicy: Always
+        name: chat-server
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+      imagePullSecrets:
+      - name: {{ .Values.server.dockerSecret }}
+

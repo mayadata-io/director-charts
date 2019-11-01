@@ -1,0 +1,63 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: alertstore-tablemanager
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: alertstore-tablemanager
+    spec:
+      serviceAccountName: sa-maya-io
+      initContainers:
+      - name: astm-wait-for-crb
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}')
+          echo $MAYA
+          until [ ! -z "$MAYA" ]
+          do
+             echo "wating for ClusterRoleBinding"
+             sleep 1;
+             export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}')
+             echo $MAYA
+          done
+      - name: astm-wait-for-cassandra
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for cassandra"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l app=cassandra -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w cassandra | wc -l)
+             echo $COUNT
+          done
+      containers:
+      - name: alertstore-tablemanager
+        image: registry.mayadata.io/alertstore-tablemanager:{{ .Values.server.release }}
+        imagePullPolicy: Always
+        args:
+        - -server.http-listen-port=80
+        - -storage.storage-client=cassandra
+        - -cassandra.addresses=cassandra.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}
+        - -cassandra.keyspace=mayaalerts
+        - -cassandra.replication-factor={{ .Values.alertStore.replicationFactor }}
+        - -log.level=debug
+        - -tablemanager.version=1
+        - -alertstore.version=1
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: {{ .Values.server.dockerSecret }}
+
