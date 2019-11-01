@@ -48,7 +48,7 @@ The following table lists the configurable parameters of the DirectorOnPrem char
 | `server.senderEmailAddress`                    | TBD                                           |      none                                 |
 | `server.senderEmailPassword`                  | TBD                                           |      none                                 |
 | `server.featureDocsDisable`                   | TBD                                           |      false                                |
-| `server.docsUrl`                               | TBD                                           |      https://docs.mayaonline.io           |
+| `server.docsUrl`                               | TBD                                           |      https://help.mayadata.io/hc/en-us        |
 | `server.featureChatBotDisable`                | TBD                                           |      true                                 |
 | `server.slackConfigBotClientId`             | TBD                                           |      none                                 |
 | `server.slackConfigBotClientSecret`         | TBD                                           |      none                                 |
@@ -84,6 +84,8 @@ Alternatively, a YAML file that specifies the values for the parameters can be p
 helm install -f values.yaml .
 ```
 
-Once MOD pods are in running state, it can be accessible from browser using NodeIp given in URL along with NodePort(Nodeip:port)
+Once DOP pods are in running state, it can be accessible from browser using NodeIp given in URL along with NodePort(Nodeip:port)
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+> **Tip**: Intial login credentails for Administrator. Username: **Administrator** Password: **password**
