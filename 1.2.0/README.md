@@ -1,25 +1,25 @@
-Maya On prem
+DirectorOnPrem
 =====================
 
 
 Introduction
 ------------
 
-This chart bootstraps MayaOnprem on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps DirectorOnPrem on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 - Kubernetes 1.12.0+ with RBAC enabled.
 - iSCSI PV support in the underlying infrastructure.
 - Create a secret with docker registry credentials and use it during helm install as parameter for value 'dockerSecret'.
 
-## Installing MayaOnprem
+## Installing DirectorOnPrem
 ```
 helm install --namespace <yournamespace> .
 ```
 
 ## Configuration
 
-The following table lists the configurable parameters of the MayaOnprem chart and their default values.
+The following table lists the configurable parameters of the DirectorOnPrem chart and their default values.
 
 | Parameter                                       | Description                                   | Default                                   |
 | ------------------------------------------------|-----------------------------------------------| ------------------------------------------|
