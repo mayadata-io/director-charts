@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: maya-ui
+  name: maya-ui
+spec:
+  ports:
+  - name: maya-ui
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: maya-ui
+
