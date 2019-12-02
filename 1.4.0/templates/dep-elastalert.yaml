@@ -47,8 +47,7 @@ spec:
              sleep 2;
              export COUNT=$(kubectl get pods -l app=maya-io -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w maya-io | wc -l)
              echo $COUNT
-          done    
-        restartPolicy: Never 
+          done
       containers:
       - name: elastalert
         image: registry.mayadata.io/elastalert:{{ .Values.server.release }}
