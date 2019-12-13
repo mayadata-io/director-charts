@@ -23,6 +23,7 @@ The following table lists the configurable parameters of the DirectorOnPrem char
 
 | Parameter                                       | Description                                   | Default                                   |
 | ------------------------------------------------|-----------------------------------------------| ------------------------------------------|
+| `platform`                           | Choose your kubernetes platform          |      default                                |
 | `server.dockerSecret`                           | Docker secret for pulling the images          |      none                                 |
 | `server.protocol`                               | http/https protocol for accessing the UI      |      http                                 |
 | `server.url`                                    | url/IP address:port for UI                    |      none                                 |
@@ -76,6 +77,11 @@ The following table lists the configurable parameters of the DirectorOnPrem char
 -----------------------------------------------------------------------------------------------------------------------------------------------
 
 
+## Platform
+   The `Platform` flag let you choose which platfrom you want to intall. 
+    -  Default value is for GKE, Packet
+    -  SUSE value is for SUSE Kubernetes platform
+
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
@@ -88,4 +94,4 @@ Once DOP pods are in running state, it can be accessible from browser using Node
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-> **Tip**: Intial login credentials for Administrator. Username: **Administrator** Password: **password**
+> **Tip**: Intial login credentails for Administrator. Username: **Administrator** Password: **password**
