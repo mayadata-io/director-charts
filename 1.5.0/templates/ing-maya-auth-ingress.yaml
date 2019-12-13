@@ -79,10 +79,6 @@ items:
             servicePort: 8080
           path: /chat-server/
         - backend:
-            serviceName: killbill-server
-            servicePort: 8080
-          path: /killbill-server/
-        - backend:
             serviceName: maya-grafana-service
             servicePort: 8686
           path: /report/
