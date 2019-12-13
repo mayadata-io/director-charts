@@ -1,0 +1,18 @@
+apiVersion: v1
+version: 1.5.0
+name: directoronprem
+appVersion: 1.5.0
+description: This is an on-premise installation of DirectorOnline
+icon: https://raw.githubusercontent.com/mayadata-io/director-charts/master/directoronprem-logo.png
+home: https://www.mayadata.io/
+keywords:
+  - monitoring
+  - visualization
+  - efk
+  - cloud-native-storage
+  - storage
+sources:
+  - https://github.com/mayadata-io/director-charts.git
+maintainers:
+  - name: moteesh
+    email: moteesh.reddy@mayadata.io
