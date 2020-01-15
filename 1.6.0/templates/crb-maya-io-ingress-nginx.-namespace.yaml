@@ -1,0 +1,29 @@
+{{ if eq .Values.platform "SUSE"}}
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: privileged-maya-io
+subjects:
+- kind: Group
+  name: system:serviceaccounts:{{ .Release.Namespace }}
+  apiGroup:  rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: suse:caasp:psp:privileged
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: privileged-ingress-nginx
+subjects:
+- kind: Group
+  name: system:serviceaccounts:ingress-nginx
+  apiGroup:  rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: suse:caasp:psp:privileged
+  apiGroup: rbac.authorization.k8s.io
+{{end}}
