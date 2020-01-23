@@ -56,6 +56,7 @@ data:
     feature.litmus.disable=true
     feature.zendesk.disable=true
     feature.chatbot.disable={{ .Values.server.featureChatBotDisable }}
+    feature.analytics.disable={{ .Values.server.featureAnalyticsDisable }}
     slack.config.bot.client.id={{ .Values.server.slackConfigBotClientId }}
     slack.config.bot.client.secret={{ .Values.server.slackConfigBotClientSecret }}
     slack.config.bot.oauth.url=https://slack.com/oauth/authorize?client_id={{ .Values.server.slackConfigBotClientId }}&scope=bot\,incoming-webhook\,commands
