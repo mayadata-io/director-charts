@@ -9,7 +9,7 @@ data:
     external.svc.unauthorize.redirect.url={{ .Values.server.protocol }}://{{ .Values.server.url }}/login
     api.security.enabled=true
     api.auth.access.mode={{ .Values.server.apiAuthAccessMode }}
-    api.ui.index={{ .Values.server.protocol }}://maya-ui.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}/latest/index.html
+    api.ui.index=http://maya-ui.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}/latest/index.html
     server.default.access.grant={{ .Values.server.serverDefaultAccessGrant }}
     maya.api.ui.enabled={{ .Values.server.apiUiEnabled }}
     maya.setup.name={{ .Values.server.setupName }}
