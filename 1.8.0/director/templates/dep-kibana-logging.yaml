@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: od-kibana-logging
+  name: od-kibana-logging
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s-app: od-kibana-logging
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        k8s-app: od-kibana-logging
+    spec:
+      containers:
+      - env:
+        - name: SERVER_BASEPATH
+          value: /kibana
+        - name: ELASTICSEARCH_HOSTS
+          value: http://od-elasticsearch-logging:9200/
+        image: registry.mayadata.io/maya-kibana:{{ .Values.server.release }}
+        imagePullPolicy: Always
+        name: kibana-logging
+        ports:
+        - containerPort: 5601
+          name: ui
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "1"
+          requests:
+            cpu: 100m
+      imagePullSecrets:
+      - name: {{ .Values.server.dockerSecret }}
+

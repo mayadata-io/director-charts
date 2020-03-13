@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastalert
+  labels:
+    app: elastalert
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elastalert
+  template:
+    metadata:
+      labels:
+        app: elastalert
+    spec:
+      serviceAccountName: sa-maya-io
+      initContainers:
+      - name: rl-wait-for-crb
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}')
+          echo $MAYA
+          until [ ! -z "$MAYA" ]
+          do
+             echo "wating for ClusterRoleBinding"
+             sleep 1;
+             export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}')
+             echo $MAYA
+          done
+      - name: am-wait-for-maya-io
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for maya-io-server"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l app=maya-io -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w maya-io | wc -l)
+             echo $COUNT
+          done
+      containers:
+      - name: elastalert
+        image: registry.mayadata.io/elastalert:{{ .Values.server.release }}
+        ports:
+        - containerPort: 3030
+          name: http
+          protocol: TCP
+        - containerPort: 3333
+          name: websocket
+          protocol: TCP
+        volumeMounts:
+        - name: config
+          mountPath: /opt/config
+        - name: rules
+          mountPath: /opt/rules
+      imagePullSecrets:
+      - name: {{ .Values.server.dockerSecret }}
+      volumes:
+      - name: config
+        configMap:
+          name: "elastalert-config"
+      - name: rules
+        configMap:
+          name: "elastalert-rules"
