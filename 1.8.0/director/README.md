@@ -78,7 +78,7 @@ The following table lists the configurable parameters of the DirectorOnPrem char
 
 
 # Platform
-   The `Platform` flag let you choose which platfrom you want to intall.
+   The `Platform` flag let you choose which platform you want to intall.
     -  Default value is for GKE, Packet
     -  SUSE value is for SUSE Kubernetes platform
 
@@ -94,4 +94,4 @@ Once DOP pods are in running state, it can be accessible from browser using Node
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-> **Tip**: Initial login credentails for Administrator. Username: **Administrator** Password: **password**
+> **Tip**: Initial login credentials for Administrator. Username: **Administrator** Password: **password**
