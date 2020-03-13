@@ -1,0 +1,26 @@
+apiVersion: v1
+entries:
+  directoronprem:
+  - apiVersion: v1
+    appVersion: 1.8.0
+    created: "2020-03-13T19:36:09.19192426+05:30"
+    description: This is an on-premise installation of DirectorOnline
+    digest: 3b91e95550ef26fb5cc407c88ac83e68d2451d2c2a73f2bb4d65a7fd3a595423
+    home: https://www.mayadata.io/
+    icon: https://raw.githubusercontent.com/mayadata-io/director-charts/master/directoronprem-logo.png
+    keywords:
+    - monitoring
+    - visualization
+    - efk
+    - cloud-native-storage
+    - storage
+    maintainers:
+    - email: support@mayadata.io
+      name: MayaData
+    name: directoronprem
+    sources:
+    - https://github.com/mayadata-io/director-charts.git
+    urls:
+    - directoronprem-1.8.0.tgz
+    version: 1.8.0
+generated: "2020-03-13T19:36:09.160002575+05:30"
