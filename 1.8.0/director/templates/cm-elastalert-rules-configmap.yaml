@@ -1,0 +1,107 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: elastalert-rules
+  labels:
+    app: elastalert
+data:
+  alert.yaml: |-
+    # rule name
+    name: alert if tag is alert
+
+    # (Required)
+    # Index to search, wildcard supported
+    index: "*"
+    
+    # Type of alert.
+    type: any
+    realert:
+      minutes: 5
+    
+    query_key: [user_id, cluster_id, eventcode, rname]
+    
+    # (Required)
+    # A list of Elasticsearch filters used for find events
+    # These filters are joined with AND and nested in a filtered query
+    # For more info: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl.html
+    filter:
+    - regexp:
+        tag: "openebs\\.alert\\..*"
+    
+    # (Required)
+    # The alert is use when a match is found
+    alert: post
+    http_post_url: "http://alertstore/alerts"
+    http_post_headers:
+      x-scope-orgid: '{user_id}'
+    http_post_payload:
+      receiver: elastalert
+      status: firing
+      alerts:
+      - status: firing
+        labels:
+          alertname: '{alertname}'
+          job: 'cluster_uuid_{cluster_id}'
+          severity: '{severity}'
+        annotations:
+          SUMMARY: '{msg} : {rname} : {reason}'
+          DESCRIPTION: ''
+          RESOURCE_NAME: '{rname}'
+          EVENTCODE: '{eventcode}'
+          REASON: '{reason}'
+          MSG: '{msg}'
+          COMPONENTID: '{rname}'
+          COMPONENTTYPE: '{component_type}'
+        startsAt: '{@timestamp}'
+        endsAt: '{@timestamp}'
+
+  alert-chat-server.yaml: |-
+    # rule name
+    name: alert chat server if tag is alert
+
+    # (Required)
+    # Index to search, wildcard supported
+    index: "*"
+
+    # Type of alert.
+    type: any
+    realert:
+      minutes: 5
+ 
+    query_key: [user_id, cluster_id, eventcode, rname]
+
+    # (Required)
+    # A list of Elasticsearch filters used for find events
+    # These filters are joined with AND and nested in a filtered query
+    # For more info: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl.html
+    filter:
+    - regexp:
+        tag: "openebs\\.alert\\..*"
+ 
+    # (Required)
+    # The alert is use when a match is found
+    alert: post
+    http_post_url: "http://chat-server:8080/maya-events"
+    http_post_headers:
+      x-scope-orgid: '{user_id}'
+    http_post_payload:
+      receiver: chat-server
+      status: firing
+      alerts:
+      - status: firing
+        sender: Elastalert
+        labels:
+          alertname: '{alertname}'
+          job: 'cluster_uuid_{cluster_id}'
+          severity: '{severity}'
+        annotations:
+          SUMMARY: '{msg} : {rname} : {reason}'
+          DESCRIPTION: ''
+          RESOURCE_NAME: '{rname}'
+          EVENTCODE: '{eventcode}'
+          REASON: '{reason}'
+          MSG: '{msg}'
+          COMPONENTID: '{rname}'
+          COMPONENTTYPE: '{component_type}'
+        startsAt: '{@timestamp}'
+        endsAt: '{@timestamp}'
