@@ -2,6 +2,7 @@
 ![Director OnPrem](directoronprem-logo.png)
 # Director Charts
 Release Notes
+* [1.8](https://github.com/mayadata-io/director-charts/wiki/1.8-(Clio))
 * [1.7](https://github.com/mayadata-io/director-charts/wiki/1.7-(Cupid))
 * [1.6](https://github.com/mayadata-io/director-charts/wiki/1.6-(Athena))
 * [1.5](https://github.com/mayadata-io/director-charts/wiki/1.5-(Morpheus))
