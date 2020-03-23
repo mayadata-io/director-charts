@@ -1,0 +1,181 @@
+apiVersion: v1
+entries:
+  directoronprem:
+  - apiVersion: v1
+    appVersion: 1.7.0
+    created: "2020-02-19T15:13:59.339766-06:00"
+    description: This is an on-premise installation of DirectorOnline
+    digest: 360c190b179c04a9b0d7c93ea8658b9e1c59854c3eaa6d916e9a306c04b47017
+    home: https://www.mayadata.io/
+    icon: https://raw.githubusercontent.com/mayadata-io/director-charts/master/directoronprem-logo.png
+    keywords:
+    - monitoring
+    - visualization
+    - efk
+    - cloud-native-storage
+    - storage
+    maintainers:
+    - email: support@mayadata.io
+      name: MayaData
+    name: directoronprem
+    sources:
+    - https://github.com/mayadata-io/director-charts.git
+    urls:
+    - directoronprem-1.7.0.tgz
+    version: 1.7.0
+  - apiVersion: v1
+    appVersion: 1.6.0
+    created: "2020-02-19T15:13:59.334419-06:00"
+    description: This is an on-premise installation of DirectorOnline
+    digest: d4f55eb6b2d4292916812f33610abb6944d669ec195fa4973a5d5308fe1755ce
+    home: https://www.mayadata.io/
+    icon: https://raw.githubusercontent.com/mayadata-io/director-charts/master/directoronprem-logo.png
+    keywords:
+    - monitoring
+    - visualization
+    - efk
+    - cloud-native-storage
+    - storage
+    maintainers:
+    - email: moteesh.reddy@mayadata.io
+      name: moteesh
+    name: directoronprem
+    sources:
+    - https://github.com/mayadata-io/director-charts.git
+    urls:
+    - directoronprem-1.6.0.tgz
+    version: 1.6.0
+  - apiVersion: v1
+    appVersion: 1.5.0
+    created: "2020-02-19T15:13:59.331104-06:00"
+    description: This is an on-premise installation of DirectorOnline
+    digest: d5381ef4e9d0aade28968b0b69331afbb98ed3ab022605c6b4aa13fcdd860f13
+    home: https://www.mayadata.io/
+    icon: https://raw.githubusercontent.com/mayadata-io/director-charts/master/directoronprem-logo.png
+    keywords:
+    - monitoring
+    - visualization
+    - efk
+    - cloud-native-storage
+    - storage
+    maintainers:
+    - email: moteesh.reddy@mayadata.io
+      name: moteesh
+    name: directoronprem
+    sources:
+    - https://github.com/mayadata-io/director-charts.git
+    urls:
+    - directoronprem-1.5.0.tgz
+    version: 1.5.0
+  - apiVersion: v1
+    appVersion: 1.4.0
+    created: "2020-02-19T15:13:59.328642-06:00"
+    description: This is an on-premise installation of DirectorOnline
+    digest: 2e3155b0b9eedfb1121353c54fafe248b1d6c6bcbe8b23bf270b0bc9c285aa40
+    home: https://www.mayadata.io/
+    icon: https://raw.githubusercontent.com/mayadata-io/director-charts/master/directoronprem-logo.png
+    keywords:
+    - monitoring
+    - visualization
+    - efk
+    - cloud-native-storage
+    - storage
+    maintainers:
+    - email: moteesh.reddy@mayadata.io
+      name: moteesh
+    name: directoronprem
+    sources:
+    - https://github.com/mayadata-io/director-charts.git
+    urls:
+    - directoronprem-1.4.0.tgz
+    version: 1.4.0
+  - apiVersion: v1
+    appVersion: 1.3.0
+    created: "2020-02-19T15:13:59.325936-06:00"
+    description: This is an on-premise installation of DirectorOnline
+    digest: cd84608c0e150d4b0305cffdc914b5885c030cd2085ef22bdb66f61438e72f64
+    home: https://www.mayadata.io/
+    icon: https://raw.githubusercontent.com/mayadata-io/director-charts/master/directoronprem-logo.png
+    keywords:
+    - monitoring
+    - visualization
+    - efk
+    - cloud-native-storage
+    - storage
+    maintainers:
+    - email: moteesh.reddy@mayadata.io
+      name: moteesh
+    name: directoronprem
+    sources:
+    - https://github.com/mayadata-io/director-charts.git
+    urls:
+    - directoronprem-1.3.0.tgz
+    version: 1.3.0
+  mayaonprem:
+  - apiVersion: v1
+    appVersion: 1.2.0
+    created: "2020-02-19T15:13:59.348554-06:00"
+    description: This is an on-premise installation of MayaOnline
+    digest: 23a3b37ecd7c4a9e38fbfc567b6d7f20b399234cc179aae1bdb55557924340a6
+    home: https://www.mayadata.io/
+    icon: https://raw.githubusercontent.com/mayadata-io/director-charts/master/directoronprem-logo.png
+    keywords:
+    - monitoring
+    - visualization
+    - efk
+    - cloud-native-storage
+    - storage
+    maintainers:
+    - email: moteesh.reddy@mayadata.io
+      name: moteesh
+    name: mayaonprem
+    sources:
+    - https://github.com/mayadata-io/director-charts.git
+    urls:
+    - mayaonprem-1.2.0.tgz
+    version: 1.2.0
+  - apiVersion: v1
+    appVersion: 1.1.0
+    created: "2020-02-19T15:13:59.345331-06:00"
+    description: This is an on-premise installation of MayaOnline
+    digest: 01b60bb32d6099791305adc1a9b7da6b777953ca0f66200db86cc53f5c9e8d21
+    home: https://www.mayadata.io/
+    icon: https://raw.githubusercontent.com/mayadata-io/director-charts/master/directoronprem-logo.png
+    keywords:
+    - monitoring
+    - visualization
+    - efk
+    - cloud-native-storage
+    - storage
+    maintainers:
+    - email: moteesh.reddy@mayadata.io
+      name: moteesh
+    name: mayaonprem
+    sources:
+    - https://github.com/mayadata-io/director-charts.git
+    urls:
+    - mayaonprem-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v1
+    appVersion: 1.0.0
+    created: "2020-02-19T15:13:59.342508-06:00"
+    description: This is an on-premise installation of MayaOnline
+    digest: 402cb9de75b70540e559a2f6b98c658e5ccae0766823c152653afd47e7eeeccd
+    home: https://www.mayadata.io/
+    icon: https://raw.githubusercontent.com/mayadata-io/director-charts/master/directoronprem-logo.png
+    keywords:
+    - monitoring
+    - visualization
+    - efk
+    - cloud-native-storage
+    - storage
+    maintainers:
+    - email: moteesh.reddy@mayadata.io
+      name: moteesh
+    name: mayaonprem
+    sources:
+    - https://github.com/mayadata-io/director-charts.git
+    urls:
+    - mayaonprem-1.0.0.tgz
+    version: 1.0.0
+generated: "2020-02-19T15:13:59.321359-06:00"
