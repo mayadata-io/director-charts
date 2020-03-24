@@ -9,7 +9,8 @@ spec:
     matchLabels:
       app: maya-grafana
   strategy:
-    type: Recreate    
+    type: Recreate
+    rollingUpdate: null
   template:
     metadata:
       labels:
