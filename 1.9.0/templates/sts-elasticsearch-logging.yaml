@@ -1,0 +1,87 @@
+# Elasticsearch deployment itself
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: od-elasticsearch-logging
+  labels:
+    k8s-app: od-elasticsearch-logging
+spec:
+  serviceName: od-elasticsearch-logging
+  replicas: {{ .Values.elasticSearch.replicas }}
+  selector:
+    matchLabels:
+      k8s-app: od-elasticsearch-logging
+  template:
+    metadata:
+      labels:
+        k8s-app: od-elasticsearch-logging
+    spec:
+      securityContext:
+        fsGroup: 1000 # fsGroup is used for elasticsearch container
+      serviceAccountName: elasticsearch-logging
+      # Elasticsearch requires vm.max_map_count to be at least 262144.
+      # If your OS already sets up this number to a higher value, feel free
+      # to remove this init container.
+      initContainers:
+      - image: alpine:3.6
+        command: ["/sbin/sysctl", "-w", "vm.max_map_count=262144"]
+        name: elasticsearch-logging-init
+        securityContext:
+          privileged: true # sysctl command needs root permission to change kernel config
+      containers:
+      - image: amazon/opendistro-for-elasticsearch:1.1.0
+        imagePullPolicy: Always
+        name: elasticsearch-logging
+        # securityContext:
+        #   runAsUser: 1000   # elasticsearch container runs with elasticsearch user (1000:1000)
+        resources:
+          # need more cpu upon initialization, therefore burstable class
+          limits:
+            cpu: 1000m
+          requests:
+            cpu: 100m
+        ports:
+        - containerPort: 9200
+          name: db
+          protocol: TCP
+        - containerPort: 9300
+          name: transport
+          protocol: TCP
+        volumeMounts:
+        - name: elasticsearch-logging
+          mountPath: /usr/share/elasticsearch/data
+        - name: internalusers
+          mountPath: /usr/share/elasticsearch/plugins/opendistro_security/securityconfig/internal_users.yml
+          subPath: internal_users.yml
+        env:
+        - name: "NAMESPACE"
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: cluster.name
+          value: do-cluster
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: discovery.type
+          value: single-node
+        - name: opendistro_security.ssl.http.enabled
+          value: "false"
+        - name: ES_JAVA_OPTS
+          value: -Xms512m -Xmx512m
+      volumes:
+      - name: internalusers
+        configMap:
+          name: "elasticsearch-internalusers" 
+  volumeClaimTemplates:
+  - metadata:
+      name: elasticsearch-logging
+      annotations:
+        volume.beta.kubernetes.io/storage-class: {{ .Values.elasticSearch.storageClass }}
+    spec:
+      accessModes: [ ReadWriteOnce ]
+      resources:
+        requests:
+          storage: {{ .Values.elasticSearch.storageCapacity }}
+

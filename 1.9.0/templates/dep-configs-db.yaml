@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configs-db
+spec:
+  selector:
+    matchLabels:
+      name: configs-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: configs-db
+      annotations:
+        prometheus.io.scrape: "false"
+    spec:
+      containers:
+      - name: configs-db
+        image: postgres:9.6
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: POSTGRES_DB
+            value: configs
+          - name: POSTGRES_HOST_AUTH_METHOD
+            value: trust
+        ports:
+        - containerPort: 5432
+      imagePullSecrets:
+      - name: {{ .Values.server.dockerSecret }}
+
