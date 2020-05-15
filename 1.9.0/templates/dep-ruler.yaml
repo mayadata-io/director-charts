@@ -1,0 +1,146 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruler
+spec:
+  selector:
+    matchLabels:
+      name: ruler
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: ruler
+    spec:
+      serviceAccountName: sa-maya-io
+      initContainers:
+      - name: rl-wait-for-crb
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}')
+          echo $MAYA
+          until [ ! -z "$MAYA" ]
+          do
+             echo "wating for ClusterRoleBinding"
+             sleep 1;
+             export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}')
+             echo $MAYA
+          done
+      - name: rl-wait-for-cassandra
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for cassandra"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l app=cassandra -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w cassandra | wc -l)
+             echo $COUNT
+          done
+      - name: rl-wait-for-consul
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for consul"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l name=consul -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w consul | wc -l)
+             echo $COUNT
+          done
+      - name: rl-wait-for-ingester
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for ingester"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l name=ingester -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w ingester | wc -l)
+             echo $COUNT
+          done
+      - name: rl-wait-for-querier
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for querier"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l name=querier -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w querier | wc -l)
+             echo $COUNT
+          done
+      - name: rl-wait-for-alertmanager
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for alertmanager"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l name=alertmanager -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w alertmanager | wc -l)
+             echo $COUNT
+          done
+      containers:
+      - name: ruler
+        image: quay.io/cortexproject/ruler:master-590e72c6
+        imagePullPolicy: IfNotPresent
+        args:
+        - -log.level=debug
+        - -server.http-listen-port=80
+        - -ruler.configs.url=http://configs.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}:80
+        - -ruler.alertmanager-url=http://alertmanager.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}/api/prom/alertmanager/
+        - -consul.hostname=consul.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}:8500
+        - -dynamodb.original-table-name=cortex
+        - -chunk.storage-client=cassandra
+        - -cassandra.addresses=cassandra.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}
+        - -cassandra.keyspace=mayacortex
+        - -cassandra.replication-factor={{ .Values.cortex.replicationFactor }}
+        - -cassandra.timeout={{ .Values.cortex.timeout }}
+        - -dynamodb.periodic-table.prefix=cortex_weekly_
+        - -dynamodb.periodic-table.from=2017-01-06
+        - -dynamodb.daily-buckets-from=2017-01-10
+        - -dynamodb.base64-buckets-from=2017-01-17
+        - -dynamodb.v4-schema-from=2017-02-05
+        - -dynamodb.v5-schema-from=2017-02-22
+        - -dynamodb.v6-schema-from=2017-03-19
+        - -dynamodb.chunk-table.from=2017-04-17
+        - -memcached.hostname=memcached.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}
+        - -memcached.timeout=100ms
+        - -memcached.service=memcached
+        - -distributor.replication-factor=1
+        - -ruler.num-workers=64
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: {{ .Values.server.dockerSecret }}
+

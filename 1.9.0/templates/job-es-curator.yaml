@@ -1,0 +1,68 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: elasticsearch-curator
+spec:
+  schedule: "0 13 * * *" # schedules the job at 1.00 am daily
+  successfulJobsHistoryLimit: 3 # how many completed jobs should be kept
+  failedJobsHistoryLimit: 3 # how many failed jobs should be kept
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: sa-maya-io
+          initContainers:
+          - name: rl-wait-for-crb
+            image: registry.mayadata.io/maya-init:1.0.0
+            command:
+            - sh
+            - "-c"
+            - |
+              set -ex
+              export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}')
+              echo $MAYA
+              until [ ! -z "$MAYA" ]
+              do
+                 echo "wating for ClusterRoleBinding"
+                 sleep 1;
+                 export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}')
+                 echo $MAYA
+              done
+          - name: am-wait-for-maya-io
+            image: registry.mayadata.io/maya-init:1.0.0
+            command:
+            - sh
+            - "-c"
+            - |
+              set -ex
+              export COUNT=0
+              echo $COUNT
+              until [ $COUNT -ne 0 ]
+              do
+                 echo "wating for maya-io-server"
+                 sleep 2;
+                 export COUNT=$(kubectl get pods -l app=maya-io -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w maya-io | wc -l)
+                 echo $COUNT
+              done    
+          restartPolicy: Never
+          containers:
+            - name: elasticsearch-curator-cronjob
+              image: registry.mayadata.io/curator:{{ .Values.server.release }}
+              imagePullPolicy: Always
+              command: ["/bin/bash"]
+              args: ["-c", "curator --config /usr/share/curator/config.yaml /usr/share/curator/action.yaml"]
+              volumeMounts:
+              - name: curator-config-files
+                mountPath: /usr/share/curator
+              ports:
+                - containerPort: 80
+          imagePullSecrets:
+          - name: {{ .Values.server.dockerSecret }}
+          volumes:
+          - name: curator-config-files
+            projected:
+              sources:
+              - configMap:
+                  name: elasticsearch-curator-action
+              - configMap:
+                  name: elasticsearch-curator-config

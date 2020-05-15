@@ -1,0 +1,177 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maya-io
+spec:
+  selector:
+    matchLabels:
+      app: maya-io
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app : maya-io
+    spec:
+      serviceAccountName: sa-maya-io
+      initContainers:
+      - name: mios-wait-for-crb
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}')
+          echo $MAYA
+          until [ ! -z "$MAYA" ]
+          do
+             echo "wating for ClusterRoleBinding"
+             sleep 1;
+             export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}')
+             echo $MAYA
+          done
+      - name: mios-wait-for-mysql
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for mysql"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l app=mysql -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w mysql | wc -l)
+             echo $COUNT
+          done
+      - name: mios-wait-for-chat-server
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for chat-server"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l app=chat-server -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w chat-server | wc -l)
+             echo $COUNT
+          done
+      - name: mios-wait-for-maya-grafana-service
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for maya-grafana"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l app=maya-grafana -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w maya-grafana | wc -l)
+             echo $COUNT
+          done
+      - name: mios-wait-for-maya-ui
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for maya-ui"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l app=maya-ui -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w maya-ui | wc -l)
+             echo $COUNT
+          done
+      - name: mios-wait-for-elasticsearch-logging
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for elasticsearch-logging"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l k8s-app=od-elasticsearch-logging -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w od-elasticsearch-logging | wc -l)
+             echo $COUNT
+          done
+      - name: mios-wait-for-kibana-logging
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for kibana-logging"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l k8s-app=od-kibana-logging -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w od-kibana-logging | wc -l)
+             echo $COUNT
+          done
+      - name: mios-wait-for-alertstore-tablemanager
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for alertstore-tablamanager"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l name=alertstore-tablemanager -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w alertstore-tablemanager | wc -l)
+             echo $COUNT
+          done
+      containers:
+        - name: maya-io
+          args:
+            - "--db-host"
+            - "mysql.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}"
+            - "--db-user"
+            - "maya"
+            - "--db-pass"
+            - "maya"
+            - "--db-name"
+            - "maya"
+          image: registry.mayadata.io/maya-io-server:{{ .Values.server.release }}
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
+          volumeMounts:
+          - name: maya-store
+            mountPath: /mayastore
+          - name: maya-config
+            mountPath: /var/lib/maya/etc/maya.properties
+            subPath: maya.properties
+      imagePullSecrets:
+      - name: {{ .Values.server.dockerSecret }}
+      volumes:
+      - name: maya-store
+        persistentVolumeClaim:
+          claimName: mayastore
+      - name: maya-config
+        configMap:
+          name: maya-config
+

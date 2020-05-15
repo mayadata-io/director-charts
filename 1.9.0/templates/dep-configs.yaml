@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configs
+spec:
+  selector:
+    matchLabels:
+      name: configs
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: configs
+    spec:
+      serviceAccountName: sa-maya-io
+      initContainers:
+      - name: cf-wait-for-crb
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}')
+          echo $MAYA
+          until [ ! -z "$MAYA" ]
+          do
+             echo "wating for ClusterRoleBinding"
+             sleep 1;
+             export MAYA=$(kubectl get ClusterRoleBinding | grep -w crb-maya-io | awk '{print $1}')
+             echo $MAYA
+          done
+      initContainers:
+      - name: cf-wait-for-configs-db
+        image: registry.mayadata.io/maya-init:1.0.0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -ex
+          export COUNT=0
+          echo $COUNT
+          until [ $COUNT -ne 0 ]
+          do
+             echo "wating for configs-db"
+             sleep 2;
+             export COUNT=$(kubectl get pods -l name=configs-db -n {{ .Release.Namespace }} -o json  | jq -r '.items[] | select(.status.phase == "Running" and ([ .status.conditions[] | select(.type == "Ready" and .status == "True") ] | length ) >= 1 ) | .metadata.name' | grep -w configs-db | wc -l)
+             echo $COUNT
+          done
+      containers:
+      - name: configs
+        image: registry.mayadata.io/cortex-configs:{{ .Values.server.release }}
+        imagePullPolicy: Always
+        args:
+        - -server.http-listen-port=80
+        - -database.uri=postgres://postgres@configs-db.{{ .Release.Namespace }}.svc.{{ .Values.server.clusterDomain }}/configs?sslmode=disable
+        - -database.migrations=/migrations
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: {{ .Values.server.dockerSecret }}
+
