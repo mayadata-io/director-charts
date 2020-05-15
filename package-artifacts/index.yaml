@@ -2,8 +2,30 @@ apiVersion: v1
 entries:
   directoronprem:
   - apiVersion: v1
+    appVersion: 1.9.0
+    created: "2020-05-16T00:14:37.975028365+05:30"
+    description: This is an on-premise installation of DirectorOnline
+    digest: 0d996eec0683c31681e66d1516d608082969b4ad1becb4d2675c13c0b468ce36
+    home: https://www.mayadata.io/
+    icon: https://raw.githubusercontent.com/mayadata-io/director-charts/master/directoronprem-logo.png
+    keywords:
+    - monitoring
+    - visualization
+    - efk
+    - cloud-native-storage
+    - storage
+    maintainers:
+    - email: support@mayadata.io
+      name: MayaData
+    name: directoronprem
+    sources:
+    - https://github.com/mayadata-io/director-charts.git
+    urls:
+    - directoronprem-1.9.0.tgz
+    version: 1.9.0
+  - apiVersion: v1
     appVersion: 1.8.0
-    created: "2020-03-24T10:48:40.363945671+05:30"
+    created: "2020-05-16T00:14:37.960981655+05:30"
     description: This is an on-premise installation of DirectorOnline
     digest: f964acd30dee9827aab0c21dccbffd364725423ada4d9a1de37c60a707d5e254
     home: https://www.mayadata.io/
@@ -25,7 +47,7 @@ entries:
     version: 1.8.0
   - apiVersion: v1
     appVersion: 1.7.0
-    created: "2020-03-24T10:48:40.356294694+05:30"
+    created: "2020-05-16T00:14:37.927536419+05:30"
     description: This is an on-premise installation of DirectorOnline
     digest: 24a4452673c21e5cddc93a56c964d37e746337d6bc87248e430b8a306f40cf30
     home: https://www.mayadata.io/
@@ -47,7 +69,7 @@ entries:
     version: 1.7.0
   - apiVersion: v1
     appVersion: 1.6.0
-    created: "2020-03-24T10:48:40.350148318+05:30"
+    created: "2020-05-16T00:14:37.921315439+05:30"
     description: This is an on-premise installation of DirectorOnline
     digest: d4f55eb6b2d4292916812f33610abb6944d669ec195fa4973a5d5308fe1755ce
     home: https://www.mayadata.io/
@@ -69,7 +91,7 @@ entries:
     version: 1.6.0
   - apiVersion: v1
     appVersion: 1.5.0
-    created: "2020-03-24T10:48:40.337541733+05:30"
+    created: "2020-05-16T00:14:37.891069675+05:30"
     description: This is an on-premise installation of DirectorOnline
     digest: d5381ef4e9d0aade28968b0b69331afbb98ed3ab022605c6b4aa13fcdd860f13
     home: https://www.mayadata.io/
@@ -91,7 +113,7 @@ entries:
     version: 1.5.0
   - apiVersion: v1
     appVersion: 1.4.0
-    created: "2020-03-24T10:48:40.335083206+05:30"
+    created: "2020-05-16T00:14:37.888602142+05:30"
     description: This is an on-premise installation of DirectorOnline
     digest: 2e3155b0b9eedfb1121353c54fafe248b1d6c6bcbe8b23bf270b0bc9c285aa40
     home: https://www.mayadata.io/
@@ -113,7 +135,7 @@ entries:
     version: 1.4.0
   - apiVersion: v1
     appVersion: 1.3.0
-    created: "2020-03-24T10:48:40.332625994+05:30"
+    created: "2020-05-16T00:14:37.8861495+05:30"
     description: This is an on-premise installation of DirectorOnline
     digest: cd84608c0e150d4b0305cffdc914b5885c030cd2085ef22bdb66f61438e72f64
     home: https://www.mayadata.io/
@@ -136,7 +158,7 @@ entries:
   mayaonprem:
   - apiVersion: v1
     appVersion: 1.2.0
-    created: "2020-03-24T10:48:40.370747817+05:30"
+    created: "2020-05-16T00:14:37.985628233+05:30"
     description: This is an on-premise installation of MayaOnline
     digest: 23a3b37ecd7c4a9e38fbfc567b6d7f20b399234cc179aae1bdb55557924340a6
     home: https://www.mayadata.io/
@@ -158,7 +180,7 @@ entries:
     version: 1.2.0
   - apiVersion: v1
     appVersion: 1.1.0
-    created: "2020-03-24T10:48:40.368735019+05:30"
+    created: "2020-05-16T00:14:37.982059991+05:30"
     description: This is an on-premise installation of MayaOnline
     digest: 01b60bb32d6099791305adc1a9b7da6b777953ca0f66200db86cc53f5c9e8d21
     home: https://www.mayadata.io/
@@ -180,7 +202,7 @@ entries:
     version: 1.1.0
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2020-03-24T10:48:40.366720977+05:30"
+    created: "2020-05-16T00:14:37.978232409+05:30"
     description: This is an on-premise installation of MayaOnline
     digest: 402cb9de75b70540e559a2f6b98c658e5ccae0766823c152653afd47e7eeeccd
     home: https://www.mayadata.io/
@@ -200,4 +222,4 @@ entries:
     urls:
     - mayaonprem-1.0.0.tgz
     version: 1.0.0
-generated: "2020-03-24T10:48:40.330255705+05:30"
+generated: "2020-05-16T00:14:37.883802328+05:30"
